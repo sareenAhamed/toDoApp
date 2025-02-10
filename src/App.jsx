@@ -66,6 +66,30 @@ const App = () => {
     }
   };
 
+  // For Delete
+  const handleDelete = async(id) => {
+    try {
+      const response = await fetch(`http://localhost:8080/task/${id}`, {
+        method: "DELETE",
+      })
+
+      if(!response.ok){
+        throw new Error("Failed to delete task");
+      }
+
+      setTasks(tasks.filter((task) => task.id !== id));
+      alert("Task successfully deleted!");
+
+    } catch (error) {
+      console.error("Error deleting task:", error);
+      alert("Failed to delete task. Please try again.");
+    }
+  }
+
+  //For Edit
+  
+    
+
   return (
     <div className='min-h-screen bg-gray-100 p-6'>
       <div className='max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md'>
@@ -76,6 +100,8 @@ const App = () => {
           <input 
             type="text" 
             name='task' 
+            value={task}
+            onChange={(e) => setTask(e.target.value)}
             placeholder='Task' 
             className="w-full p-2 focus:ps-4 duration-500 focus:border-sky-600 focus:outline focus:outline-sky-600 border border-gray-300 rounded-lg mb-2"
           />
@@ -83,6 +109,8 @@ const App = () => {
           <input 
             type="text" 
             name='description' 
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             placeholder='Description' 
             className="w-full p-2 focus:ps-4 duration-500 focus:border-sky-600 focus:outline focus:outline-sky-600 border border-gray-300 rounded-lg mb-2"
           />
@@ -107,10 +135,10 @@ const App = () => {
       <button className="px-4 py-2 text-sm font-medium text-white bg-green-500 rounded-lg shadow-md hover:bg-green-600 transition duration-300">
         ✅ Completed
       </button>
-      <button className="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-lg shadow-md hover:bg-red-600 transition duration-300">
+      <button className="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-lg shadow-md hover:bg-red-600 transition duration-300" onClick={(() => handleDelete(task.id))}>
         🗑️ Delete
       </button>
-      <button className="px-4 py-2 text-sm font-medium text-white bg-yellow-500 rounded-lg shadow-md hover:bg-yellow-600 transition duration-300">
+      <button className="px-4 py-2 text-sm font-medium text-white bg-yellow-500 rounded-lg shadow-md hover:bg-yellow-600 transition duration-300" onClick={(() => handleEdit(task.id))}>
         ✏️ Edit
       </button>
     </div>
@@ -123,5 +151,6 @@ const App = () => {
     </div>
   )
 }
+
 
 export default App
